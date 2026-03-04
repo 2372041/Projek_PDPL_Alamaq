@@ -35,6 +35,7 @@ def main():
         print("Input N harus angka.")
         return
 
+## allegra woi
     arr = []
     for _ in range(n):
         val = int(input("Nilai x :"))
