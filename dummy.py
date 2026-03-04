@@ -4,7 +4,7 @@ def print_array(arr):
     print(*(arr))
 
 
-# --- Skenario Dua TESTTING!!!!!!!!! ---
+# --- Skenario Dua TESTTING!!!!!!!!! --- oleh Axel
 
 # SHELL SORT
 def shell_sort(arr):
