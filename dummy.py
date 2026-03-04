@@ -20,6 +20,8 @@ def shell_sort(arr):
                     break
         gap //= 2
 
+# -- Skenario satu testttttttttttttttttt --
+
 # PROGRAM UTAMA
 def main():
     try:
