@@ -35,6 +35,7 @@ def main():
         print("Input N harus angka.")
         return
 
+# testing skenario 3 Axel
     arr = []
     for _ in range(n):
         val = int(input("Nilai x :"))
