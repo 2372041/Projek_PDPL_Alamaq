@@ -3,6 +3,9 @@
 def print_array(arr):
     print(*(arr))
 
+
+# --- Skenario Dua TESTTING!!!!!!!!! ---
+
 # SHELL SORT
 def shell_sort(arr):
     n = len(arr)
