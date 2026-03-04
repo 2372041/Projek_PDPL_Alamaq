@@ -1,5 +1,6 @@
 # Mencoba 3 Kasus dalam Github
 # 2372041 - Axel Hizkia Mapandin
+# Maliq Edit
 def print_array(arr):
     print(*(arr))
 
