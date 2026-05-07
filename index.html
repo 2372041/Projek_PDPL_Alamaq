@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartExpense - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <h1>SmartExpense</h1>
+        <div class="user-profile">
+            <span>Halo, User!</span> </div>
+    </nav>
+
+    <main class="container">
+        <section class="balance-card">
+            <p>Total Saldo Utama</p>
+            <h2>Rp 5.000.000</h2>
+        </section>
+
+        <section class="quick-add">
+            <h3>Catat Transaksi Baru</h3>
+            <form>
+                <input type="number" placeholder="Nominal (Amount)" required>
+                <select>
+                    <option value="expense">Pengeluaran</option>
+                    <option value="income">Pemasukan</option>
+                </select>
+                <input type="text" placeholder="Catatan (Note)">
+                <button type="submit" class="btn-save">Simpan</button>
+            </form>
+        </section>
+
+        <section class="recent-transactions">
+            <h3>Transaksi Terakhir</h3>
+            <ul>
+                <li class="item-expense">Makan Siang - Rp 35.000</li>
+                <li class="item-income">Gaji Bulanan - Rp 4.500.000</li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>

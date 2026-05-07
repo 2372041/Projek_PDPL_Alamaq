@@ -1,0 +1,44 @@
+:root {
+    --primary-color: #2c3e50;
+    --accent-color: #27ae60;
+    --bg-light: #f4f7f6;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    margin: 0;
+}
+
+.navbar {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.container {
+    padding: 20px 5%;
+}
+
+.balance-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.btn-save {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.item-expense { border-left: 5px solid #e74c3c; padding: 10px; margin: 5px 0; background: #fff; list-style: none;}
+.item-income { border-left: 5px solid #27ae60; padding: 10px; margin: 5px 0; background: #fff; list-style: none;}
