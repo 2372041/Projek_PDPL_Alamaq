@@ -40,5 +40,20 @@ body {
     cursor: pointer;
 }
 
+.alert-box {
+    background-color: #ffeaa7;
+    border-left: 10px solid #fab1a0;
+    padding: 15px;
+    margin-bottom: 20px;
+    color: #d63031;
+    font-weight: bold;
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
 .item-expense { border-left: 5px solid #e74c3c; padding: 10px; margin: 5px 0; background: #fff; list-style: none;}
 .item-income { border-left: 5px solid #27ae60; padding: 10px; margin: 5px 0; background: #fff; list-style: none;}

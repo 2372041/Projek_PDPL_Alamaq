@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,7 @@ public class Account implements IAccount {
     private double balance;
     private String currency; // IDR, USD
     private Date createdAt;
+    private List<IBudgetObserver> observers = new ArrayList<>();
 
     public Account(int accountId, int userId, String name, String type, String currency) {
         this.accountId = accountId;
@@ -27,12 +29,23 @@ public class Account implements IAccount {
         }
     }
 
+    public void addObserver(IBudgetObserver observer) {
+        observers.add(observer);
+    }
+
+    public void notifyObservers() {
+        for (IBudgetObserver observer : observers) {
+            observer.update(this.balance);
+        }
+    }
+
     @Override
     public void withdraw(double amount) throws Exception {
         if (amount > 0 && this.balance >= amount) {
             this.balance -= amount;
+            notifyObservers(); // Beritahu observer setiap ada penarikan
         } else {
-            throw new Exception("Saldo tidak mencukupi atau jumlah tidak valid."); // Error Handling yang Jelas
+            throw new Exception("Saldo tidak mencukupi!");
         }
     }
 
