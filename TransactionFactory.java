@@ -1,3 +1,9 @@
+// CODE-CITE:
+//   Title: [AI-Generated Code]
+//   Type: [ai]
+//   Value: [Isi Link/Sumber]
+//   Notes: [Menggunakan Factory Method Pattern untuk membuat instansi objek IncomeTransaction dan ExpenseTransaction. Struktur dan logika dasar dihasilkan oleh AI.]
+//   Lines Range: 14
 public class TransactionFactory {
     
     // Method statis untuk membuat objek transaksi berdasarkan tipe

@@ -1,3 +1,9 @@
+// CODE-CITE:
+//   Title: [AI-Generated Code / Standard JDBC Boilerplate]
+//   Type: [ai]
+//   Value: [Isi Link/Sumber]
+//   Notes: [Menggunakan Singleton Pattern untuk mengatur koneksi ke MySQL. Kode referensi standar JDBC untuk koneksi database.]
+//   Lines Range: 31
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
