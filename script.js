@@ -2,7 +2,8 @@
 //   Title: [AI-Generated Code]
 //   Type: [ai]
 //   Value: [Isi Link/Sumber]
-//   Notes: [DOM Manipulation sederhana untuk menangkap input form dan memperbarui baris tabel secara dinamis (tanpa reload).]
+//   Notes: [DOM Manipulation sederhana untuk menangkap input form dan memperbarui baris tabel secara dinamis (tanpa reload).
+//        - DOM Manipulation untuk UI SmartExpense.]
 //   Lines Range: 37
 // Menangkap elemen dari HTML
 const form = document.querySelector('form');

@@ -1,3 +1,9 @@
+// CODE-CITE:
+//   Title: DAO Pattern
+//   Type: [ai]
+//   Value: [Isi Link/Sumber]
+//   Notes: Menggunakan Data Access Object (DAO) Pattern untuk memisahkan logika eksekusi query MySQL dari logika model bisnis utama.
+//   Lines Range: 53
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
