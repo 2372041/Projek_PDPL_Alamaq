@@ -40,4 +40,43 @@ form.addEventListener('submit', function(e) {
 
     // Mengosongkan form setelah simpan
     form.reset();
+});const form = document.getElementById('transaction-form');
+const tbody = document.getElementById('transaction-tbody');
+
+form.addEventListener('submit', function(e) {
+    e.preventDefault(); 
+
+    const type = document.getElementById('type').value;
+    const amount = document.getElementById('amount').value;
+    const note = document.getElementById('note').value;
+    
+    // Format nominal ke Rupiah
+    const formattedAmount = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
+
+    let displayAmount = type === 'expense' ? `- ${formattedAmount}` : `+ ${formattedAmount}`;
+    let textClass = type === 'expense' ? 'text-expense' : 'text-income';
+    let badgeClass = type === 'expense' ? 'badge-expense' : 'badge-income';
+    let categoryText = type === 'expense' ? 'Pengeluaran' : 'Pemasukan';
+
+    const newRow = document.createElement('tr');
+    
+    newRow.innerHTML = `
+        <td><span class="badge ${badgeClass}">Baru saja</span></td>
+        <td>
+            <strong>${note}</strong><br>
+            <small class="text-muted">${categoryText}</small>
+        </td>
+        <td class="text-right ${textClass}">${displayAmount}</td>
+    `;
+
+    // Animasi sederhana saat menambah baris
+    newRow.style.opacity = '0';
+    tbody.insertBefore(newRow, tbody.firstChild);
+    
+    setTimeout(() => {
+        newRow.style.opacity = '1';
+        newRow.style.transition = 'opacity 0.5s ease-in';
+    }, 50);
+
+    form.reset();
 });
