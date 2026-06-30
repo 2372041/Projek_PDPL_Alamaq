@@ -47,7 +47,7 @@ Antarmuka web ini bersifat *mockup interaktif* yang menstimulasikan alur kerja b
 
 ---
 
-## 💻 Fitur Utama di Dalam Dashboard
+## Fitur Utama di Dalam Dashboard
 
 Setelah Anda berhasil Login dan masuk ke halaman Dashboard utama (`index.html`), Anda dapat berinteraksi dengan berbagai fitur berikut yang mensimulasikan sistem Java di belakangnya:
 
