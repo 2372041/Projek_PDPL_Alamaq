@@ -1,5 +1,7 @@
 import java.util.List;
 
+import database.src.models.Transaction;
+
 // Antarmuka untuk abstraksi akun
 public interface IAccount {
     void deposit(double amount);

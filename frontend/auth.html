@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartExpense | Autentikasi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .auth-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: var(--bg-color); }
+        .auth-card { width: 100%; max-width: 400px; padding: 40px 30px; text-align: center; }
+        .auth-logo { font-size: 32px; font-weight: 700; color: var(--text-main); margin-bottom: 10px; }
+        .auth-subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 30px; }
+        .auth-form { text-align: left; }
+        .switch-link { color: var(--accent-gold); cursor: pointer; font-weight: 600; text-decoration: none; }
+        .switch-link:hover { text-decoration: underline; }
+        .toggle-text { margin-top: 20px; font-size: 13px; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="glass-card auth-card">
+            <div class="auth-logo">
+                <i class="fa-solid fa-wallet" style="color: var(--accent-gold);"></i> SmartExpense
+            </div>
+            <p class="auth-subtitle" id="auth-subtitle">Masuk untuk mengelola keuangan Anda</p>
+            
+            <form id="auth-form" class="auth-form">
+                <div class="input-group" id="group-name" style="display: none;">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="name" placeholder="Masukkan nama Anda">
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="contoh@email.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Password (PIN)</label>
+                    <input type="password" id="password" placeholder="Masukkan password" required>
+                </div>
+                <button type="submit" class="btn-primary" id="btn-submit">
+                    Masuk <i class="fa-solid fa-right-to-bracket"></i>
+                </button>
+            </form>
+
+            <p class="toggle-text" id="toggle-text">
+                Belum punya akun? <a class="switch-link" id="btn-toggle">Daftar sekarang</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('auth-form');
+        const btnToggle = document.getElementById('btn-toggle');
+        const groupName = document.getElementById('group-name');
+        const btnSubmit = document.getElementById('btn-submit');
+        const subtitle = document.getElementById('auth-subtitle');
+        const toggleText = document.getElementById('toggle-text');
+        
+        let isLogin = true;
+
+        btnToggle.addEventListener('click', () => {
+            isLogin = !isLogin;
+            if (isLogin) {
+                groupName.style.display = 'none';
+                document.getElementById('name').removeAttribute('required');
+                btnSubmit.innerHTML = 'Masuk <i class="fa-solid fa-right-to-bracket"></i>';
+                subtitle.innerText = 'Masuk untuk mengelola keuangan Anda';
+                toggleText.innerHTML = 'Belum punya akun? <a class="switch-link" id="btn-toggle" onclick="btnToggle.click()">Daftar sekarang</a>';
+            } else {
+                groupName.style.display = 'block';
+                document.getElementById('name').setAttribute('required', 'true');
+                btnSubmit.innerHTML = 'Daftar <i class="fa-solid fa-user-plus"></i>';
+                subtitle.innerText = 'Buat akun baru untuk memulai';
+                toggleText.innerHTML = 'Sudah punya akun? <a class="switch-link" id="btn-toggle" onclick="btnToggle.click()">Masuk di sini</a>';
+            }
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (isLogin) {
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const user = users.find(u => u.email === email && u.password === password);
+                if (user) {
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    window.location.href = 'index.html';
+                } else {
+                    alert('Email atau Password salah!');
+                }
+            } else {
+                const name = document.getElementById('name').value;
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                if (users.find(u => u.email === email)) {
+                    alert('Email sudah terdaftar!');
+                    return;
+                }
+                users.push({ name, email, password });
+                localStorage.setItem('users', JSON.stringify(users));
+                alert('Registrasi Berhasil! Silakan masuk.');
+                // Kosongkan form
+                document.getElementById('password').value = '';
+                isLogin = true;
+                btnToggle.click(); // Switch back to login
+            }
+        });
+
+        // Initialize Theme from localStorage
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
+</body>
+</html>

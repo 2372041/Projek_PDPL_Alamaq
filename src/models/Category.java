@@ -1,3 +1,4 @@
+package models;
 public class Category {
     private int categoryId;
     private String name;

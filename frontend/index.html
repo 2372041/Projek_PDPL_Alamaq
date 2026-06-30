@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartExpense | Premium Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo">
+                <i class="fa-solid fa-wallet" style="color: var(--accent-gold);"></i> SmartExpense
+            </div>
+            <div class="user-profile">
+                <button id="btn-backup" class="btn-icon" style="margin-right: 10px;" title="Backup Data"><i class="fa-solid fa-cloud-arrow-up"></i></button>
+                <button id="btn-restore" class="btn-icon" style="margin-right: 15px;" title="Restore Data" onclick="document.getElementById('restore-file').click()"><i class="fa-solid fa-cloud-arrow-down"></i></button>
+                <input type="file" id="restore-file" style="display: none;" accept=".json">
+                <button id="btn-theme-toggle" class="btn-icon" style="margin-right: 15px;" title="Ganti Tema"><i class="fa-solid fa-moon"></i></button>
+                <img src="https://ui-avatars.com/api/?name=User+Alamaq&background=D4AF37&color=fff" alt="User" class="avatar" id="user-avatar">
+                <span id="user-name-display">Halo, Alamaq Team</span>
+                <button onclick="window.location.href='settings.html'" class="btn-icon" style="margin-left: 15px; color: var(--text-main); border: none; background: transparent; cursor: pointer;" title="Pengaturan Profil"><i class="fa-solid fa-gear"></i></button>
+                <button onclick="logout()" class="btn-icon" style="margin-left: 5px; color: var(--expense-red); border: none; background: transparent; cursor: pointer;" title="Keluar"><i class="fa-solid fa-power-off"></i></button>
+            </div>
+        </header>
+
+        <div id="alert-area" class="alert-box" style="display: none;">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span id="alert-message"><strong>Peringatan:</strong> Saldo Anda mendekati batas limit!</span>
+        </div>
+
+        <main class="dashboard-grid">
+            <div class="left-column">
+                <div class="glass-card balance-card">
+                    <p class="card-subtitle">Total Saldo Tersedia</p>
+                    <h1 class="balance-amount" id="balance-display">Rp 2.000.000</h1>
+                    <p style="font-size: 13px; margin-bottom: 15px; opacity: 0.9; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                        <span><i class="fa-solid fa-scale-balanced"></i> Batas Pengeluaran: <span id="budget-limit-display">Rp 500.000</span></span>
+                        <button onclick="editBudget()" class="btn-icon" style="background: transparent; padding: 0; margin: 0; color: rgba(255,255,255,0.7); font-size: 14px;" title="Edit Batas"><i class="fa-solid fa-pen-to-square"></i></button>
+                    </p>
+                    <div class="card-footer">
+                        <select id="account-selector" style="background: transparent; color: white; border: none; font-size: 14px; font-weight: 600; cursor: pointer; outline: none;">
+                            <option value="1" style="color: var(--text-main);">Dompet Utama</option>
+                            <option value="2" style="color: var(--text-main);">Tabungan</option>
+                        </select>
+                        <button id="btn-currency" class="btn-small">IDR <i class="fa-solid fa-arrows-rotate"></i></button>
+                    </div>
+                </div>
+
+                <!-- Financial Goal Tracker -->
+                <div class="glass-card" style="margin-top: 20px;">
+                    <h3 style="font-size: 16px; margin-bottom: 10px; color: var(--text-main); display: flex; justify-content: space-between; align-items: center;">
+                        <span><i class="fa-solid fa-bullseye" style="color: var(--income-green);"></i> Target Tabungan: <span id="goal-title-display">Beli Laptop</span></span>
+                        <button onclick="editGoal()" class="btn-icon" style="background: transparent; padding: 0; margin: 0; color: var(--text-muted);" title="Edit Target"><i class="fa-solid fa-pen-to-square"></i></button>
+                    </h3>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 5px;">Terkumpul: <span id="goal-current">Rp 0</span> dari <span id="goal-target">Rp 10.000.000</span></p>
+                    <div style="width: 100%; background: var(--input-border); border-radius: 10px; height: 10px; overflow: hidden;">
+                        <div id="goal-progress" style="width: 0%; height: 100%; background: var(--income-green); transition: width 0.5s;"></div>
+                    </div>
+                </div>
+
+                <div class="glass-card form-card" style="margin-top: 20px;">
+                    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="margin: 0;"><i class="fa-solid fa-plus-circle"></i> Catat Transaksi Baru</h3>
+                        <div class="undo-redo-actions">
+                            <button id="btn-undo" class="btn-icon" title="Undo" disabled><i class="fa-solid fa-rotate-left"></i></button>
+                            <button id="btn-redo" class="btn-icon" title="Redo" disabled><i class="fa-solid fa-rotate-right"></i></button>
+                        </div>
+                    </div>
+                    <form id="transaction-form">
+                        <div class="input-group">
+                            <label>Jenis Transaksi</label>
+                            <select id="type" required>
+                                <option value="income">Pemasukan (Income)</option>
+                                <option value="expense">Pengeluaran (Expense)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Nominal</label>
+                            <input type="number" id="amount" placeholder="Contoh: 150000" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Catatan / Keterangan</label>
+                            <input type="text" id="note" placeholder="Contoh: Beli Kopi" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Lampiran / Bukti (Opsional)</label>
+                            <input type="file" id="attachment" style="padding: 8px;" accept="image/*,.pdf">
+                        </div>
+                        <div class="input-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                            <input type="checkbox" id="is-recurring" style="width: auto;">
+                            <label for="is-recurring" style="margin: 0; color: var(--text-muted); font-size: 13px;">Jadikan Transaksi Berulang (Tiap Bulan)</label>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            <i class="fa-solid fa-plus"></i> Simpan Transaksi
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div class="glass-card history-card">
+                    <div class="history-header">
+                        <h3><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Transaksi</h3>
+                        <div class="export-actions">
+                            <button id="btn-export-csv" class="btn-small-outline" title="Export CSV"><i class="fa-solid fa-file-csv"></i> CSV</button>
+                            <button id="btn-export-json" class="btn-small-outline" title="Export JSON"><i class="fa-solid fa-file-code"></i> JSON</button>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <input type="text" id="search-input" placeholder="Cari transaksi..." style="flex: 1; padding: 10px 15px; border-radius: 10px; border: 1px solid var(--input-border); background: var(--bg-color); color: var(--text-main); font-size: 13px; outline: none;">
+                        <select id="filter-type" style="padding: 10px 15px; border-radius: 10px; border: 1px solid var(--input-border); background: var(--bg-color); color: var(--text-main); font-size: 13px; outline: none;">
+                            <option value="all">Semua Tipe</option>
+                            <option value="income">Pemasukan</option>
+                            <option value="expense">Pengeluaran</option>
+                        </select>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Keterangan</th>
+                                    <th class="text-right">Nominal</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transaction-tbody">
+                                <!-- Dinamis via script.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Goal Modal -->
+    <div id="goal-modal" class="modal-overlay">
+        <div class="glass-card modal-content">
+            <h3 style="margin-bottom: 15px; color: var(--text-main);"><i class="fa-solid fa-bullseye"></i> Edit Target Tabungan</h3>
+            <div class="input-group">
+                <label>Nama Target</label>
+                <input type="text" id="modal-goal-title" placeholder="Contoh: Beli Mobil">
+            </div>
+            <div class="input-group">
+                <label>Nominal Target (Rp)</label>
+                <input type="number" id="modal-goal-target" placeholder="Contoh: 50000000">
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                <button id="btn-close-modal" class="btn-small-outline" style="border-color: var(--text-muted); color: var(--text-muted);">Batal</button>
+                <button id="btn-save-goal" class="btn-primary" style="padding: 10px 20px;">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Budget Modal -->
+    <div id="budget-modal" class="modal-overlay">
+        <div class="glass-card modal-content">
+            <h3 style="margin-bottom: 15px; color: var(--text-main);"><i class="fa-solid fa-scale-balanced"></i> Edit Batas Pengeluaran</h3>
+            <div class="input-group">
+                <label>Batas Maksimal Pengeluaran (Rp)</label>
+                <input type="number" id="modal-budget-limit" placeholder="Contoh: 1000000">
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                <button id="btn-close-budget-modal" class="btn-small-outline" style="border-color: var(--text-muted); color: var(--text-muted);">Batal</button>
+                <button id="btn-save-budget" class="btn-primary" style="padding: 10px 20px;">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

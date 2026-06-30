@@ -1,6 +1,8 @@
 import java.util.Date;
 import java.util.List;
 
+import database.src.models.Account;
+
 public class User {
     private int userId;
     private String name;

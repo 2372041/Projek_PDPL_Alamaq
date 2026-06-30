@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartExpense | Pengaturan Profil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container" style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+        <div class="glass-card" style="width: 100%; max-width: 500px; padding: 40px;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px;">
+                <button onclick="window.location.href='index.html'" class="btn-icon" style="color: var(--text-main);"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2 style="color: var(--text-main); margin: 0;">Pengaturan Profil</h2>
+            </div>
+            
+            <form id="settings-form">
+                <div class="input-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="set-name" required>
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="set-email" required>
+                </div>
+                <div class="input-group">
+                    <label>Password Baru (Kosongkan jika tidak diganti)</label>
+                    <input type="password" id="set-password" placeholder="***">
+                </div>
+                
+                <button type="submit" class="btn-primary" style="margin-top: 10px;">
+                    <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Init theme
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) window.location.href = 'auth.html';
+
+        document.getElementById('set-name').value = currentUser.name;
+        document.getElementById('set-email').value = currentUser.email;
+
+        document.getElementById('settings-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const newName = document.getElementById('set-name').value;
+            const newEmail = document.getElementById('set-email').value;
+            const newPassword = document.getElementById('set-password').value;
+
+            // Update in mock DB
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userIndex = users.findIndex(u => u.email === currentUser.email);
+            
+            if (userIndex !== -1) {
+                // Check email collision
+                if (newEmail !== currentUser.email && users.find(u => u.email === newEmail)) {
+                    alert('Email sudah digunakan akun lain!');
+                    return;
+                }
+
+                users[userIndex].name = newName;
+                users[userIndex].email = newEmail;
+                if (newPassword.trim() !== '') {
+                    users[userIndex].password = newPassword;
+                }
+                
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                // Update active session
+                currentUser.name = newName;
+                currentUser.email = newEmail;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+                alert('Profil berhasil diperbarui!');
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>
