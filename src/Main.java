@@ -1,19 +1,18 @@
-import db.DatabaseConnection;
 import dao.TransactionDAO;
 import factory.TransactionFactory;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import models.Account;
 import models.Transaction;
 import observer.BudgetAlertObserver;
 import smartexpense.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import pattern.decorator.*;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("=========================================================");
-        System.out.println("   SMARTEXPENSE FINAL DEMO - 100% COMPLETE (ALAMAQ)  ");
+        System.out.println("   SMARTEXPENSE FINAL DEMO (ALAMAQ)  ");
         System.out.println("=========================================================\n");
 
         // --- BAGIAN 75% LAMA ---
@@ -37,7 +36,7 @@ public class Main {
         sessionTransactions.add(t1);
 
         System.out.println("\n=========================================================");
-        System.out.println("         DEMO FITUR BARU 25% (PROGRESS 100%)             ");
+        System.out.println("         (PROGRESS 100%)             ");
         System.out.println("=========================================================\n");
 
         // --- BAGIAN 25% BARU ---
@@ -76,6 +75,20 @@ public class Main {
         // Export ke JSON
         exportManager.setStrategy(new JSONExport());
         exportManager.executeExport(sessionTransactions);
+
+        // D. DECORATOR PATTERN (Attachment & PIN Lock)
+        System.out.println("\n--- 3. DEMO DECORATOR PATTERN (PIN Lock & Attachment) ---");
+        Transaction originalTx = TransactionFactory.createTransaction("EXPENSE", 0, dompetUtama.getAccountId(), 3, 50000, new Date(), "Beli Kopi", "");
+        
+        // 1. Bungkus dengan Attachment
+        Transaction decoratedTx = new AttachmentDecorator(originalTx, "Kopi Starbucks pakai promo");
+        System.out.println("Summary (Dengan Attachment): " + decoratedTx.getSummary());
+        
+        // 2. Bungkus dengan PIN Lock (membungkus yang sudah di-decorate)
+        PINLockDecorator securedTx = new PINLockDecorator(decoratedTx, "12345");
+        System.out.println("\nSummary (Terkunci PIN): " + securedTx.getSummary());
+        securedTx.unlock("12345");
+        System.out.println("Summary (Setelah PIN Benar): " + securedTx.getSummary());
 
         // C. SINGLETON PATTERN TAMBAHAN (Currency Converter)
         System.out.println("\n--- 3. DEMO SINGLETON PATTERN TAMBAHAN (KURS MATA UANG) ---");
